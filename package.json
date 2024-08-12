@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "react-native-paper": "^5.12.5",
+    "react-native-popover-view": "^5.1.8"
+  }
+}
