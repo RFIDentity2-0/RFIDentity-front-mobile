@@ -1,8 +1,9 @@
 import { StyleSheet } from "react-native";
 export const tablestyles = StyleSheet.create({
   tablefooter: {
-    flex: 1,
-    justifyContent: "center",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   button: {

@@ -6,16 +6,33 @@ import { Button } from "react-native-paper";
 import { tablestyles } from "./tablestyles";
 import { ScrollView } from "react-native-gesture-handler";
 import TableModalComponent from "./tablemodal";
+import { View } from "react-native";
+import { Link } from "expo-router";
+// interface Asset {
+//   AssetId: string;
+//   Description: string;
+//   VM_Location: string;
+//   SAP_Room: string;
+//   Status: string;
+//   Action: string;
+// }
+
+interface TableComponentProps {
+  room: string;
+}
+interface AssetList extends Array<Asset> {}
+
+// for testing purposes
 interface Asset {
   AssetId: string;
   Description: string;
   VM_Location: string;
-  SAP_Room: string;
   Status: string;
   Action: string;
 }
 
-const TableComponent = () => {
+// end of testing
+const TableComponent: React.FC<TableComponentProps> = ({ room }) => {
   // table states
   const [page, setPage] = React.useState<number>(0);
   const [numberOfItemsPerPageList] = React.useState([10, 15, 20, 30]);
@@ -86,14 +103,23 @@ const TableComponent = () => {
               selectPageDropdownLabel={"Rows per page"}
             />
           </DataTable>
-          <Button
-            style={tablestyles.button}
-            icon="camera"
-            mode="contained"
-            onPress={() => console.log("Pressed")}
-          >
-            klik
-          </Button>
+          <View style={tablestyles.tablefooter}>
+            <Link
+              href={{
+                pathname: "/[room]",
+                params: { room: room },
+              }}
+            >
+              View user details
+            </Link>
+            <Button
+              style={tablestyles.button}
+              mode="contained"
+              onPress={() => console.log("Pressed")}
+            >
+              enter
+            </Button>
+          </View>
         </PaperProvider>
       </ScrollView>
     );
