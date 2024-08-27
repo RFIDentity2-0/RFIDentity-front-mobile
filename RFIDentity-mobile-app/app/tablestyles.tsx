@@ -7,7 +7,7 @@ export const tablestyles = StyleSheet.create({
     alignItems: "center",
   },
   button: {
-    width: "20%",
+    width: "30%",
   },
   cell: {
     alignItems: "center",

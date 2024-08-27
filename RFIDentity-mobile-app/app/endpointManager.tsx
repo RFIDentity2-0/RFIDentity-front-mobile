@@ -1,8 +1,8 @@
-export const getAreas = async () => {
+export const areasFetch = async () => {
   let result = null;
   try {
     const response = await fetch(
-      "http://192.168.0.192:4000/api/getAssetsLocations",
+      "http://localhost:8080/api/dashboard/listLocationsWithAssets?page=0&size=5&sort=location",
       {
         method: "GET",
         headers: {
@@ -19,14 +19,16 @@ export const getAreas = async () => {
   } catch (err) {
     console.error("Fetch error:", err);
   }
-  return result.areas;
+
+  // Return the result directly, assuming it contains the correct data structure
+  return result;
 };
 
-export const testFetch = async () => {
+export const tableFetch = async (room: string) => {
   let result;
   try {
     const response = await fetch(
-      "https://66b4810f9f9169621ea33918.mockapi.io/rfid/assets",
+      `http://localhost:8080/api/locations/locationsToRoomsPage?location=${room}&page=0&size=1&sort=itemStatus`,
       {
         method: "GET",
       }
@@ -39,31 +41,6 @@ export const testFetch = async () => {
     console.log(result);
   } catch (err) {
     console.log(err);
-  }
-  return result;
-};
-
-export const getArea = async (location: string) => {
-  let result = null;
-  try {
-    const response = await fetch("http://192.168.0.192:4000/api/readArea", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        accept: "*/*", // Opcjonalne, w zależności od wymagań serwera
-      },
-      body: JSON.stringify({
-        location: location,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    result = await response.json();
-  } catch (err) {
-    console.error("Fetch error:", err);
   }
   return result;
 };
