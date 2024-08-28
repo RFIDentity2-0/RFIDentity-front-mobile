@@ -12,12 +12,12 @@ export const areasFetch = async () => {
     );
 
     if (!response.ok) {
-      throw new Error("Network response was not ok");
+      throw new Error("areasFetch response was not ok");
     }
 
     result = await response.json();
   } catch (err) {
-    console.error("Fetch error:", err);
+    console.error("areasFetch error:", err);
   }
 
   // Return the result directly, assuming it contains the correct data structure
@@ -34,13 +34,33 @@ export const tableFetch = async (room: string) => {
       }
     );
     if (!response.ok) {
-      throw new Error("test fetch response was not ok");
+      throw new Error("tableFetch fetch response was not ok");
     }
     result = await response.json();
     console.log("result");
     console.log(result);
   } catch (err) {
-    console.log(err);
+    console.error("tableFetch error:", err);
+  }
+  return result;
+};
+export const insideLocationFetch = async (location: string) => {
+  let result;
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/locations/insideLocation?location=${location}&page=0&size=10&sort=assetId`,
+      {
+        method: "GET",
+      }
+    );
+    if (!response.ok) {
+      throw new Error("insideLocationFetch fetch response was not ok");
+    }
+    result = await response.json();
+    console.log("result");
+    console.log(result);
+  } catch (err) {
+    console.error("insideLocationFetch error:", err);
   }
   return result;
 };

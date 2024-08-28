@@ -104,7 +104,7 @@ const TableComponent: React.FC<TableComponentProps> = ({ room }) => {
               </DataTable.Row>
             ))}
 
-            <DataTable.Pagination
+            {/* <DataTable.Pagination
               page={page}
               numberOfPages={Math.ceil(items.length / itemsPerPage)}
               onPageChange={(page) => setPage(page)}
@@ -114,7 +114,7 @@ const TableComponent: React.FC<TableComponentProps> = ({ room }) => {
               onItemsPerPageChange={onItemsPerPageChange}
               showFastPaginationControls
               selectPageDropdownLabel={"Rows per page"}
-            />
+            /> */}
           </DataTable>
           <View style={tablestyles.tablefooter}>
             <Button
