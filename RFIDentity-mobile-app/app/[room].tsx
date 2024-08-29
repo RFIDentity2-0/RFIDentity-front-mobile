@@ -1,4 +1,4 @@
-import { View, ScrollView, Text } from "react-native";
+import { View, ScrollView } from "react-native";
 import { useRoute, RouteProp } from "@react-navigation/native";
 import { insideLocationFetch } from "./endpointManager";
 import React from "react";
@@ -14,7 +14,7 @@ type RouteParams = {
 interface Asset {
   assetId: string;
   description: string;
-  itemStatus: string;
+  inventoryStatus: string;
   comment: string;
 }
 
@@ -38,7 +38,7 @@ export default function RoomComponent() {
   async function onScanClick() {
     const updatedAssets = assets.map((asset) => ({
       ...asset,
-      itemStatus: randomStatus(),
+      inventoryStatus: randomStatus(),
     }));
     setAssets(updatedAssets);
     console.log(updatedAssets);
@@ -47,9 +47,9 @@ export default function RoomComponent() {
   async function onSaveClick() {
     const payload = {
       location,
-      assets: assets.map(({ assetId, itemStatus, comment }) => ({
+      assets: assets.map(({ assetId, inventoryStatus, comment }) => ({
         assetId,
-        status: itemStatus,
+        status: inventoryStatus,
         comment: comment || "",
       })),
     };
@@ -102,53 +102,61 @@ export default function RoomComponent() {
   function getRowColor(status: string) {
     switch (status) {
       case "OK":
-        return { backgroundColor: "#8be6a0" }; // Light green for OK
+        return { backgroundColor: "#8be6a0" };
       case "NEW":
-        return { backgroundColor: "#c6c9ce" }; // Light grey for NEW
+        return { backgroundColor: "#c6c9ce" };
       case "MISSING":
-        return { backgroundColor: "#ec7d87" }; // Light red for MISSING
+        return { backgroundColor: "#ec7d87" };
       default:
         return {};
     }
   }
 
   return (
-    <ScrollView contentContainerStyle={roomtablestyles.container}>
-      <View style={roomtablestyles.header}>
-        <Text style={roomtablestyles.headerText}>{location}</Text>
-      </View>
+    <View style={{ flex: 1 }}>
       <PaperProvider>
-        <DataTable style={roomtablestyles.dataTable}>
-          <DataTable.Header>
-            <DataTable.Title style={roomtablestyles.headerTitle}>
-              Asset ID
-            </DataTable.Title>
-            <DataTable.Title style={roomtablestyles.headerTitle}>
-              Description
-            </DataTable.Title>
-            <DataTable.Title style={roomtablestyles.headerTitle}>
-              Status
-            </DataTable.Title>
-            <DataTable.Title style={roomtablestyles.headerTitle}>
-              Action
-            </DataTable.Title>
-          </DataTable.Header>
+        <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
+          <View style={roomtablestyles.label}>Selected room: {location}</View>
 
-          {assets.map((item) => (
-            <DataTable.Row
-              key={item.assetId}
-              style={getRowColor(item.itemStatus)}
-            >
-              <DataTable.Cell>{item.assetId}</DataTable.Cell>
-              <DataTable.Cell numeric>{item.description}</DataTable.Cell>
-              <DataTable.Cell numeric>{item.itemStatus}</DataTable.Cell>
-              <DataTable.Cell style={roomtablestyles.cell}>
-                <TableModalComponent />
-              </DataTable.Cell>
-            </DataTable.Row>
-          ))}
-        </DataTable>
-        <View style={roomtablestyles.tableFooter}>
+          <DataTable>
+            <DataTable.Header>
+              <DataTable.Title style={roomtablestyles.column}>
+                Asset ID
+              </DataTable.Title>
+              <DataTable.Title style={roomtablestyles.column}>
+                Description
+              </DataTable.Title>
+              <DataTable.Title style={roomtablestyles.column}>
+                Status
+              </DataTable.Title>
+              <DataTable.Title style={roomtablestyles.column}>
+                Action
+              </DataTable.Title>
+            </DataTable.Header>
+
+            {assets.map((item) => (
+              <DataTable.Row
+                key={item.assetId}
+                style={getRowColor(item.inventoryStatus)}
+              >
+                <DataTable.Cell style={roomtablestyles.column}>
+                  {item.assetId}
+                </DataTable.Cell>
+                <DataTable.Cell style={roomtablestyles.column} numeric>
+                  {item.description}
+                </DataTable.Cell>
+                <DataTable.Cell style={roomtablestyles.column} numeric>
+                  {item.inventoryStatus}
+                </DataTable.Cell>
+                <DataTable.Cell style={roomtablestyles.column}>
+                  <TableModalComponent />
+                </DataTable.Cell>
+              </DataTable.Row>
+            ))}
+          </DataTable>
+        </ScrollView>
+
+        <View style={roomtablestyles.footer}>
           <Button
             style={roomtablestyles.button}
             mode="contained"
@@ -165,6 +173,6 @@ export default function RoomComponent() {
           </Button>
         </View>
       </PaperProvider>
-    </ScrollView>
+    </View>
   );
 }

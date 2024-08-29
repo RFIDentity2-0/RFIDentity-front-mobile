@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -21,7 +22,9 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#333",
   },
-  cell: {
+  column: {
+    flex: 1, // Ensures columns take up equal width
+    justifyContent: "center",
     textAlign: "center",
   },
   tableFooter: {

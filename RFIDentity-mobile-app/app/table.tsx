@@ -77,26 +77,22 @@ const TableComponent: React.FC<TableComponentProps> = ({ room }) => {
         <PaperProvider>
           <DataTable style={styles.dataTable}>
             <DataTable.Header>
-              <DataTable.Title style={styles.dataTableTitle}>
-                Asset ID
-              </DataTable.Title>
-              <DataTable.Title style={styles.dataTableTitle}>
+              <DataTable.Title style={styles.column}>Asset ID</DataTable.Title>
+              <DataTable.Title style={styles.column}>
                 Description
               </DataTable.Title>
-              <DataTable.Title style={styles.dataTableTitle}>
-                Action
-              </DataTable.Title>
+              <DataTable.Title style={styles.column}>Action</DataTable.Title>
             </DataTable.Header>
 
             {items.slice(from, to).map((item) => (
               <DataTable.Row key={item.assetId}>
-                <DataTable.Cell style={styles.cell}>
+                <DataTable.Cell style={styles.column}>
                   {item.assetId}
                 </DataTable.Cell>
-                <DataTable.Cell style={styles.cell} numeric>
+                <DataTable.Cell style={styles.column} numeric>
                   {item.description}
                 </DataTable.Cell>
-                <DataTable.Cell style={styles.cell}>
+                <DataTable.Cell style={styles.column}>
                   <TableModalComponent />
                 </DataTable.Cell>
               </DataTable.Row>
@@ -124,4 +120,5 @@ const TableComponent: React.FC<TableComponentProps> = ({ room }) => {
     );
   }
 };
+
 export default TableComponent;

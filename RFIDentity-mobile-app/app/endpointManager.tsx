@@ -48,7 +48,7 @@ export const insideLocationFetch = async (location: string) => {
   let result;
   try {
     const response = await fetch(
-      `http://localhost:8080/api/locations/insideLocation?location=${location}&page=0&size=10&sort=assetId`,
+      `http://localhost:8080/api/locations/insideLocation?location=${location}&page=0&size=20&sort=assetId`,
       {
         method: "GET",
       }
