@@ -1,4 +1,4 @@
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, Text } from "react-native";
 import { useRoute, RouteProp } from "@react-navigation/native";
 import { insideLocationFetch } from "./endpointManager";
 import React from "react";
@@ -26,9 +26,7 @@ interface RoomData {
 }
 
 export default function RoomComponent() {
-  // Access the route object with a defined type
   const route = useRoute<RouteProp<{ params: RouteParams }, "params">>();
-  // Extract and decode the 'room' parameter from the route object
   const location = decodeURIComponent(route.params.room);
 
   const [assets, setAssets] = React.useState<Asset[]>([]);
@@ -46,9 +44,40 @@ export default function RoomComponent() {
     console.log(updatedAssets);
   }
 
-  function onSaveClick() {
-    //////////////////////////////////////////////////////////////////////////////
-    //MUST IMPLEMENT
+  async function onSaveClick() {
+    const payload = {
+      location,
+      assets: assets.map(({ assetId, itemStatus, comment }) => ({
+        assetId,
+        status: itemStatus,
+        comment: comment || "",
+      })),
+    };
+
+    console.log("Payload:", JSON.stringify(payload, null, 2));
+
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/mobile/updateOutcome",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log("Save successful:", result);
+    } catch (error) {
+      console.error("Save failed:", error);
+    }
   }
 
   function randomStatus() {
@@ -70,29 +99,39 @@ export default function RoomComponent() {
     }
   }
 
-  // Determine row color based on status
   function getRowColor(status: string) {
     switch (status) {
       case "OK":
-        return { backgroundColor: "green" };
+        return { backgroundColor: "#8be6a0" }; // Light green for OK
       case "NEW":
-        return { backgroundColor: "grey" };
+        return { backgroundColor: "#c6c9ce" }; // Light grey for NEW
       case "MISSING":
-        return { backgroundColor: "red" };
+        return { backgroundColor: "#ec7d87" }; // Light red for MISSING
       default:
         return {};
     }
   }
 
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={roomtablestyles.container}>
+      <View style={roomtablestyles.header}>
+        <Text style={roomtablestyles.headerText}>{location}</Text>
+      </View>
       <PaperProvider>
-        <DataTable>
+        <DataTable style={roomtablestyles.dataTable}>
           <DataTable.Header>
-            <DataTable.Title>AssetId</DataTable.Title>
-            <DataTable.Title>Description</DataTable.Title>
-            <DataTable.Title>Status</DataTable.Title>
-            <DataTable.Title>Action</DataTable.Title>
+            <DataTable.Title style={roomtablestyles.headerTitle}>
+              Asset ID
+            </DataTable.Title>
+            <DataTable.Title style={roomtablestyles.headerTitle}>
+              Description
+            </DataTable.Title>
+            <DataTable.Title style={roomtablestyles.headerTitle}>
+              Status
+            </DataTable.Title>
+            <DataTable.Title style={roomtablestyles.headerTitle}>
+              Action
+            </DataTable.Title>
           </DataTable.Header>
 
           {assets.map((item) => (
@@ -109,7 +148,7 @@ export default function RoomComponent() {
             </DataTable.Row>
           ))}
         </DataTable>
-        <View style={roomtablestyles.tablefooter}>
+        <View style={roomtablestyles.tableFooter}>
           <Button
             style={roomtablestyles.button}
             mode="contained"
@@ -120,7 +159,7 @@ export default function RoomComponent() {
           <Button
             style={roomtablestyles.button}
             mode="contained"
-            onPress={() => console.log("SAVE Pressed")}
+            onPress={onSaveClick}
           >
             SAVE
           </Button>

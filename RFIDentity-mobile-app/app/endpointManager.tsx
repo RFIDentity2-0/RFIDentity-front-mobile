@@ -2,7 +2,7 @@ export const areasFetch = async () => {
   let result = null;
   try {
     const response = await fetch(
-      "http://localhost:8080/api/dashboard/listLocationsWithAssets?page=0&size=5&sort=location",
+      "http://localhost:8080/api/dashboard/listLocationsWithAssets?page=0&size=20&sort=location",
       {
         method: "GET",
         headers: {
